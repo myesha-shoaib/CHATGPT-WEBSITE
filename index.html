@@ -1,0 +1,196 @@
+<!-- index.html -->
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChatGPT Style UI (HTML + CSS)</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <!--  toggle checkbox -->
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+    <!-- overlay -->
+    <label for="nav-toggle" class="overlay"></label>
+
+    <div class="app">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <img src="./IMAGES/chatgpt-logo.webp" alt="Logo" class="brand-logo">
+                <div>
+                    <div class="brand-title">ChatUI</div>
+                    <div class="brand-sub">HTML + CSS + Tiny JS</div>
+                </div>
+            </div>
+
+            <button class="new-chat" id="newChatBtn">+ New chat</button>
+
+            <div class="history">
+                <div class="h-title">Recent</div>
+                <a class="h-item active" href="#">Teacher Impress UI</a>
+                <a class="h-item" href="#">Funny Chat Demo</a>
+                <a class="h-item" href="#">Light Theme</a>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user">
+                    <div class="avatar">
+                        <img src="./IMAGES/chatgpt-logo.webp" alt="user logo">
+                    </div>
+                    <div class="user-meta">
+                        <div class="user-name">Mohtashim</div>
+                        <div class="user-sub">UI Builder Mode</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="main">
+
+            <!-- Top bar -->
+            <header class="topbar">
+                <div class="top-left">
+                    <!-- Hamburger  -->
+                    <label for="nav-toggle" class="menu-btn" aria-label="Open menu">☰</label>
+
+                    <span class="pill">ChatGPT-like UI</span>
+                    <span class="muted">— HTML & CSS</span>
+                </div>
+
+                <div class="top-right">
+                    <span class="dot"></span>
+                    <span class="muted">Online</span>
+                </div>
+            </header>
+
+            <!-- Chat area -->
+            <section class="chat" id="chat">
+
+                <div class="system">
+                    <span class="system-badge">Tip</span>
+                    Ye sirf UI hai boss 😄 AI nahi… abhi bas acting kar raha hai.
+                </div>
+
+                <div class="msg row user">
+                    <div class="bubble">
+                        Upgrade my UI so hard that my teacher thinks I’ve been coding since birth.
+                    </div>
+                    <div class="mini-avatar">U</div>
+                </div>
+
+                <div class="msg row bot">
+                    <div class="mini-avatar bot">G</div>
+                    <div class="bubble">
+                        Hahaha done! 😄<br>
+                        HTML builds the body, CSS gives it a wedding outfit,<br>
+                        and JavaScript… well, that’s what brings it to life.<br><br>
+
+                        I’ve made your UI so ChatGPT-ish that the only thing missing now is
+                        your teacher’s <b>“Wow!”</b> reaction 😂<br><br>
+
+                        And remember — if a bug appears in your code:<br>
+                        <b>“Bugs are not fixed… they are negotiated.”</b>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Input bar -->
+            <footer class="composer">
+                <div class="input-wrap">
+                    <div class="input-icon">+</div>
+                    <input id="msgInput" type="text" placeholder="Ask anything..." />
+                    <button class="send" id="sendBtn" aria-label="Send">➤</button>
+                </div>
+
+                <div class="composer-hint">
+                    <span class="muted">Shift + Enter</span> for new line
+                </div>
+            </footer>
+
+        </main>
+    </div>
+
+   <script>
+        const input = document.getElementById("msgInput");
+        const chat = document.getElementById("chat");
+        const sendBtn = document.getElementById("sendBtn");
+        const newChatBtn = document.getElementById("newChatBtn");
+
+        function addMessage(text, who = "user") {
+            if (who === "user") {
+                chat.innerHTML += `
+          <div class="msg row user">
+            <div class="bubble">${escapeHtml(text)}</div>
+            <div class="mini-avatar">U</div>
+          </div>
+        `;
+            } else {
+                chat.innerHTML += `
+          <div class="msg row bot">
+            <div class="mini-avatar bot">G</div>
+            <div class="bubble">${text}</div>
+          </div>
+        `;
+            }
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function fakeBotReply() {
+            const replies = [
+                `😂 Noted! Your UI is so clean even bugs will feel shy to appear.`,
+                `😎 UI upgraded. Teacher’s next question: “Where did you learn this wizardry?”`,
+                `🚀 Your design is now so polished that it can slide into a job interview confidently.`,
+                `👀 Warning: Your UI is so good your teacher might think you used “Inspect Element” as a team.`,
+                `✨ Remember: It’s not a bug… it’s a surprise feature.`
+            ];
+            const pick = replies[Math.floor(Math.random() * replies.length)];
+            addMessage(pick, "bot");
+        }
+
+        function sendMessage() {
+            const text = input.value.trim();
+            if (!text) return;
+            addMessage(text, "user");
+            input.value = "";
+            setTimeout(fakeBotReply, 500);
+        }
+
+        sendBtn.addEventListener("click", sendMessage);
+
+        input.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        newChatBtn.addEventListener("click", () => {
+            chat.innerHTML = `
+        <div class="system">
+          <span class="system-badge">Tip</span>
+          Ye sirf UI hai boss 😄 AI nahi… abhi bas acting kar raha hai.
+        </div>
+      `;
+            input.focus();
+        });
+
+        function escapeHtml(str) {
+            return str
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+    </script>
+
+</body>
+
+</html>
